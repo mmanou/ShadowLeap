@@ -1,0 +1,4 @@
+Frog:		Jakenbear 	https://opengameart.org/content/pixel-frog
+Tiles: 		Xarius 		https://opengameart.org/content/pixel-tileset
+Vehicles:	Master484	https://opengameart.org/content/basic-2d-car-collection
+Log:		Kenney.nl	https://opengameart.org/content/platformer-art-pixel-redux

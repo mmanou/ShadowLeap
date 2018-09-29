@@ -4,9 +4,19 @@ import org.newdawn.slick.SlickException;
 abstract public class Vehicle extends Sprite {
 	double velocity;
 
-	public Vehicle(String imageSrc, float x, float y, boolean flipImg, float velocity) throws SlickException {
+	public Vehicle(String imageSrc, float x, float y, boolean flipImg, float velocity)
+			throws SlickException {
 		super(imageSrc, x, y, flipImg);
 		this.velocity = velocity;
+	}
+	public Vehicle(String imageSrc, float x, float y, boolean flipImg,
+			float width, float height, float velocity) throws SlickException {
+		super(imageSrc, x, y, flipImg, width, height);
+		this.velocity = velocity;
+	}
+	
+	public double getVelocity() {
+		return this.velocity;
 	}
 
 	@Override
@@ -14,13 +24,13 @@ abstract public class Vehicle extends Sprite {
 		addToX((float)(velocity * delta));
 		
 		/* Reset right-moving bus */
-		if(this.getX() > App.SCREEN_WIDTH + (World.TILE_WIDTH / 2)) {
-			setX(-World.TILE_WIDTH);
+		if(this.getX() > App.SCREEN_WIDTH + (this.getWidth() / 2)) {
+			setX(-this.getWidth());
 		}
 
 		/* Reset left-moving bus */
-		if (this.getX() < -World.TILE_WIDTH) {
-			setX(App.SCREEN_WIDTH + (World.TILE_WIDTH / 2));
+		if (this.getX() < -this.getWidth()) {
+			setX(App.SCREEN_WIDTH + (this.getWidth() / 2));
 		}
 		
 		super.update(input, delta);

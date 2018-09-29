@@ -11,20 +11,43 @@ public class Sprite {
 
 	private float x;
 	private float y;
+	private float width = World.TILE_WIDTH;
+	private float height = World.TILE_WIDTH;
+	private boolean isSolid = false;
 	private Image image;
 	private BoundingBox bBox;
+	
 
-	/* Constant image */
-	public Sprite(String imageSrc, float x, float y, boolean flipImg) throws SlickException {
+	/* Same width and height for Sprite and Image */
+	public Sprite(String imageSrc, float x, float y, boolean flipImg)
+			throws SlickException {
 		if  (flipImg == true) {
 			image = new Image(imageSrc).getFlippedCopy(true, false);
 		}
 		else {
 			image = new Image(imageSrc);
 		}
-		bBox = new BoundingBox(x, y,  World.TILE_WIDTH, World.TILE_HEIGHT);
+		this.setWidth(image.getWidth());
+		this.setHeight(image.getHeight());
 		this.setX(x);
 		this.setY(y);
+		bBox = new BoundingBox(image, x, y);
+	}
+	
+	/* Different width and height for Sprite and Image */
+	public Sprite(String imageSrc, float x, float y, boolean flipImg, float width, float height)
+			throws SlickException {
+		if  (flipImg == true) {
+			image = new Image(imageSrc).getFlippedCopy(true, false);
+		}
+		else {
+			image = new Image(imageSrc);
+		}
+		this.setWidth(width);
+		this.setHeight(height);
+		this.setX(x);
+		this.setY(y);
+		bBox = new BoundingBox(x, y, width, height);
 	}
 
 	public void update(Input input, int delta) {
@@ -39,7 +62,7 @@ public class Sprite {
 		image.drawCentered(x, y);
 	}
 
-	public void contactSprite(Sprite other) {
+	public void contactSprite(Sprite other, int delta) {
 	}
 
 	public float getX() {
@@ -68,6 +91,30 @@ public class Sprite {
 
 	public void setRotation(float rotationAngle) {
 		image.setRotation(rotationAngle);
+	}
+
+	public boolean isSolid() {
+		return isSolid;
+	}
+
+	public void setSolid(boolean isSolid) {
+		this.isSolid = isSolid;
+	}
+
+	public float getWidth() {
+		return width;
+	}
+
+	public void setWidth(float width) {
+		this.width = width;
+	}
+
+	public float getHeight() {
+		return height;
+	}
+
+	public void setHeight(float height) {
+		this.height = height;
 	}
 	
 }

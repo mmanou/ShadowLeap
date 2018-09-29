@@ -10,15 +10,18 @@ public class Player extends Sprite {
 	public static final float LIVES_X_OFFSET = 32;
 	public static final float LIVES_Y = 744;
 	
-	private boolean onLog = false;
+	private boolean onPlatform = false;
+	private int frogHolesReached = 0;
+	private World world;;
 	
 	ArrayList<Life> livesList = new ArrayList<Life>();
 	
-	public Player(String imageSrc, float x, float y) throws SlickException {
+	public Player(String imageSrc, float x, float y, World world) throws SlickException {
 		super(imageSrc, x, y, false);
 		for (int i = 0; i < INITIAL_LIVES; i++) {
 			gainLife();
 		}
+		this.world = world;
 	}
 	/*
 	public void gainLife(String type) throws SlickException {
@@ -29,12 +32,12 @@ public class Player extends Sprite {
 		livesList.add(new Life());
 	}
 	
-	public boolean getOnLog() {
-		return this.onLog;
+	public boolean getOnPlatform() {
+		return this.onPlatform;
 	}
 	
-	public void setOnLog(boolean onLog) {
-		this.onLog = onLog;
+	public void setOnPlatform(boolean onPlatform) {
+		this.onPlatform = onPlatform;
 	}
 	
 	public void loseLife() {
@@ -48,32 +51,63 @@ public class Player extends Sprite {
 
 	@Override
 	public void update(Input input, int delta) {
+		
+		this.setOnPlatform(false);
 
 		/* Player movement */
 		if (input.isKeyPressed(Input.KEY_LEFT)) {
 			this.setRotation(Sprite.FACE_LEFT_ANGLE);
 			if (this.getX() > World.TILE_WIDTH) {
 				this.addToX(-World.TILE_WIDTH);
+				super.update(input, delta);
+				if (world.checkValidMove(this) == false) {
+					this.addToX(World.TILE_WIDTH);
+				}
 			}
+
 		}
 
 		if (input.isKeyPressed(Input.KEY_RIGHT)) {
 			this.setRotation(Sprite.FACE_RIGHT_ANGLE);
 			if (this.getX() < App.SCREEN_WIDTH - World.TILE_WIDTH) {
 				this.addToX(World.TILE_WIDTH);
+				super.update(input, delta);
+				if (world.checkValidMove(this) == false) {
+					this.addToX(-World.TILE_WIDTH);
+				}
 			}
+
+			
 		}
 
 		if (input.isKeyPressed(Input.KEY_UP)) {
 			this.setRotation(Sprite.FACE_UPWARD_ANGLE);
 			this.addToY(-World.TILE_WIDTH);
+			super.update(input, delta);
+			if (world.checkValidMove(this) == false) {
+				this.addToY(World.TILE_WIDTH);
+			}
 		}
 
 		if (input.isKeyPressed(Input.KEY_DOWN)) {
 			this.setRotation(Sprite.FACE_DOWNWARD_ANGLE);
 			if (this.getY() < App.SCREEN_HEIGHT - World.TILE_WIDTH) {
 				this.addToY(World.TILE_WIDTH);
+				super.update(input, delta);
+				if (world.checkValidMove(this) == false) {
+					this.addToY(-World.TILE_WIDTH);
+				}
 			}
+		}
+		
+		if (this.getX() < -(World.TILE_WIDTH / 2)
+				|| this.getX() > App.SCREEN_WIDTH + (World.TILE_WIDTH / 2)) {
+			loseLife();
+			resetPosition();
+		}
+		
+		if (getFrogHolesReached() == 5) {
+			System.exit(1);
 		}
 
 		super.update(input, delta);
@@ -87,14 +121,16 @@ public class Player extends Sprite {
 	}
 
 	@Override
-	public void contactSprite(Sprite other) {
+	public void contactSprite(Sprite other, int delta) {
 		if (other instanceof Traffic) {
 			loseLife();
 			resetPosition();
 		}
-		
-		if (other instanceof Water) {
-			if (this.onLog == false) {
+		else if (other instanceof Platform) {
+			this.setOnPlatform(true);
+		}
+		else if (other instanceof Water) {
+			if (this.getOnPlatform() == false) {
 				loseLife();
 				resetPosition();
 			}
@@ -108,4 +144,28 @@ public class Player extends Sprite {
 			livesList.get(i).render(LIVES_X + (i * LIVES_X_OFFSET), LIVES_Y - 48);    //DELETE THE 48!!!!!!!!!!!!!
 		}
 	}
+	public int getFrogHolesReached() {
+		return frogHolesReached;
+	}
+	public void resetFrogHolesReached(int frogHolesReached) {
+		this.frogHolesReached = 0;
+	}
+	public void incrementFrogHolesReached() {
+		this.frogHolesReached++;
+	}
+	
+	/*
+	public boolean wouldCollide(float x, float y) {
+		bb = new BoundingBox(x, y, World.TILE_WIDTH, World.TILE_HEIGHT);
+			
+		}
+		for (int i = 0; i < World.spriteList.size() - 1; i++) {
+			if (bb.intersects(World.spriteList.get(i)) {
+				
+			}
+		
+		return true;
+	}
+	*/
+	
 }

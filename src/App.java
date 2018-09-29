@@ -3,6 +3,8 @@
  * by Eleanor McMurtry, University of Melbourne
  */
 
+import java.io.FileNotFoundException;
+
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
@@ -29,7 +31,12 @@ public class App extends BasicGame {
     @Override
     public void init(GameContainer gc)
             throws SlickException {
-        world = new World();
+        try {
+			world = new World();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     /** Update the game state for a frame.

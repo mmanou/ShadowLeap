@@ -14,6 +14,7 @@ public class Sprite {
 	private float width = World.TILE_WIDTH;
 	private float height = World.TILE_WIDTH;
 	private boolean isSolid = false;
+	private boolean isImageFlipped;
 	private Image image;
 	private BoundingBox bBox;
 	
@@ -22,9 +23,11 @@ public class Sprite {
 	public Sprite(String imageSrc, float x, float y, boolean flipImg)
 			throws SlickException {
 		if  (flipImg == true) {
+			isImageFlipped = true;
 			image = new Image(imageSrc).getFlippedCopy(true, false);
 		}
 		else {
+			isImageFlipped = false;
 			image = new Image(imageSrc);
 		}
 		this.setWidth(image.getWidth());
@@ -49,10 +52,24 @@ public class Sprite {
 		this.setY(y);
 		bBox = new BoundingBox(x, y, width, height);
 	}
+	
+	public boolean isImageFlipped() {
+		return isImageFlipped;
+	}
+	public void flipImage() {
+		if (isImageFlipped == true) {
+			isImageFlipped = false;
+		}
+		else {
+			isImageFlipped = true;
+		}
+		image = image.getFlippedCopy(true, false);
+	}
 
 	public void update(Input input, int delta) {
 		update();
 	}
+	
 	public void update() {
 		bBox.setX(x);
 		bBox.setY(y);

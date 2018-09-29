@@ -107,7 +107,7 @@ public class Player extends Sprite {
 		}
 		
 		if (getFrogHolesReached() == 5) {
-			System.exit(1);
+			resetPosition();
 		}
 
 		super.update(input, delta);
@@ -129,17 +129,27 @@ public class Player extends Sprite {
 		else if (other instanceof Platform) {
 			this.setOnPlatform(true);
 		}
+		else if (other instanceof Turtle) {
+			if (((Turtle) other).isSubmerged() == false) {
+				this.setOnPlatform(true);
+			}
+			
+		}
 		else if (other instanceof Water) {
 			if (this.getOnPlatform() == false) {
 				loseLife();
 				resetPosition();
 			}
 		}
+		
 	}
 	
 	@Override
 	public void render() {
-		super.render();
+		if (getFrogHolesReached() < 5) {
+			super.render();
+		}
+		
 		for (int i = 0; i < livesList.size(); i++) {								  //DELETE THE 48!!!!!!!!!!!!!
 			livesList.get(i).render(LIVES_X + (i * LIVES_X_OFFSET), LIVES_Y - 48);    //DELETE THE 48!!!!!!!!!!!!!
 		}
@@ -153,19 +163,5 @@ public class Player extends Sprite {
 	public void incrementFrogHolesReached() {
 		this.frogHolesReached++;
 	}
-	
-	/*
-	public boolean wouldCollide(float x, float y) {
-		bb = new BoundingBox(x, y, World.TILE_WIDTH, World.TILE_HEIGHT);
-			
-		}
-		for (int i = 0; i < World.spriteList.size() - 1; i++) {
-			if (bb.intersects(World.spriteList.get(i)) {
-				
-			}
-		
-		return true;
-	}
-	*/
 	
 }

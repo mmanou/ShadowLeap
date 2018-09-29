@@ -48,7 +48,12 @@ public class App extends BasicGame {
             throws SlickException {
         // Get data about the current input (keyboard state).
         Input input = gc.getInput();
-        world.update(input, delta);
+        try {
+			world.update(input, delta);
+		} catch (NumberFormatException | FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     /** Render the entire screen, so it reflects the current game state.

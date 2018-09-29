@@ -23,12 +23,12 @@ abstract public class Vehicle extends Sprite {
 	public void update(Input input, int delta) {
 		addToX((float)(velocity * delta));
 		
-		/* Reset right-moving bus */
+		/* Reset right-moving vehicle */
 		if(this.getX() > App.SCREEN_WIDTH + (this.getWidth() / 2)) {
 			setX(-this.getWidth());
 		}
 
-		/* Reset left-moving bus */
+		/* Reset left-moving vehicle */
 		if (this.getX() < -this.getWidth()) {
 			setX(App.SCREEN_WIDTH + (this.getWidth() / 2));
 		}

@@ -21,17 +21,27 @@ public class World {
 	/* Bus speed in pixels */
 	public static final float BUS_VELOCITY = 0.15f;
 	
-	public static Integer currentLevel = 0;
-
+	public static int currentLvl = 1;
+	public int playerFinished = 0;
 	
 	/* Stores all game Sprites that have collision effects */
 	ArrayList<Sprite> spriteList = new ArrayList<Sprite>();
 	ArrayList<Sprite> tileList = new ArrayList<Sprite>();
 	ArrayList<Player> playerList = new ArrayList<Player>();
 
-	public World() throws SlickException, FileNotFoundException {
+	public World() throws SlickException, NumberFormatException, FileNotFoundException {
+
+		/* Initialise player */
+		playerList.add(new Player("assets/frog.png", PLAYER_START_X, PLAYER_START_Y, this));
 		
-		File lvlFile = new File("assets/levels/" + currentLevel.toString() + ".lvl");
+		initLevel(currentLvl);
+		
+	}
+	
+	@SuppressWarnings("resource")
+	public void initLevel(int lvl)
+			throws SlickException, FileNotFoundException, NumberFormatException {
+		File lvlFile = new File("assets/levels/" + Integer.toString(lvl) + ".lvl");
 		String[] objLine = new String[4];
 		Scanner scanner = new Scanner(lvlFile);
 		
@@ -39,16 +49,24 @@ public class World {
 		float nextFrogHoleX = 0;
 		float nextFrogHoleY = 0;
 		
+		/* delete all non-Player Sprites and reset level */
+		spriteList.clear();
+		tileList.clear();
+		resetPlayers();
+		
+		
+		/* Read in Sprites from .lvl file */
 		while (scanner.hasNext()) {
-			
 			objLine = scanner.nextLine().split(",");
 			System.out.println("New " + objLine[0] + ":       (" + objLine[1].toString() + ", " + objLine[2].toString() + ")");
 			
 			if(objLine[0].equals("water")) {
-				tileList.add(new Water("assets/water.png", Float.valueOf(objLine[1]), Float.valueOf(objLine[2])));
+				tileList.add(new Water("assets/water.png",
+						Float.valueOf(objLine[1]), Float.valueOf(objLine[2])));
 			}
 			else if(objLine[0].equals("grass")) {
-				tileList.add(new Grass("assets/grass.png", Float.valueOf(objLine[1]), Float.valueOf(objLine[2])));
+				tileList.add(new Grass("assets/grass.png",
+						Float.valueOf(objLine[1]), Float.valueOf(objLine[2])));
 			}
 			
 			/* Initialise Trees and FrogHoles" */
@@ -84,54 +102,84 @@ public class World {
 							Float.valueOf(objLine[1]), Float.valueOf(objLine[2]), false, BUS_VELOCITY));
 				}
 			}
-			
+			else if(objLine[0].equals("racecar")) {
+				if(objLine[3].equals("false")) {
+					spriteList.add(new Traffic("assets/racecar.png",
+							Float.valueOf(objLine[1]), Float.valueOf(objLine[2]), true, -BUS_VELOCITY));
+				}
+				else {
+					spriteList.add(new Traffic("assets/racecar.png",
+							Float.valueOf(objLine[1]), Float.valueOf(objLine[2]), false, BUS_VELOCITY));
+				}
+			}
+			else if(objLine[0].equals("bike")) {
+				if(objLine[3].equals("false")) {
+					spriteList.add(new Bike("assets/bike.png",
+							Float.valueOf(objLine[1]), Float.valueOf(objLine[2]), true, -BUS_VELOCITY));
+				}
+				else {
+					spriteList.add(new Bike("assets/bike.png",
+							Float.valueOf(objLine[1]), Float.valueOf(objLine[2]), false, BUS_VELOCITY));
+				}
+			}
+			else if(objLine[0].equals("turtle")) {
+				if(objLine[3].equals("false")) {
+					spriteList.add(new Turtle("assets/turtles.png",
+							Float.valueOf(objLine[1]), Float.valueOf(objLine[2]),
+							false, 120, TILE_HEIGHT, -BUS_VELOCITY));
+				}
+				else {
+					spriteList.add(new Turtle("assets/turtles.png",
+							Float.valueOf(objLine[1]), Float.valueOf(objLine[2]),
+							true, 120, TILE_HEIGHT, BUS_VELOCITY));
+				}
+			}
 			else if(objLine[0].equals("longLog")) {
 				if(objLine[3].equals("false")) {
 					spriteList.add(new Platform("assets/longLog.png",
-							Float.valueOf(objLine[1]), Float.valueOf(objLine[2]), true, 240, TILE_HEIGHT, -BUS_VELOCITY));
+							Float.valueOf(objLine[1]), Float.valueOf(objLine[2]),
+							true, 240, TILE_HEIGHT, -BUS_VELOCITY));
 				}
 				else {
 					spriteList.add(new Platform("assets/longLog.png",
-							Float.valueOf(objLine[1]), Float.valueOf(objLine[2]), false, 240, TILE_HEIGHT, BUS_VELOCITY));
+							Float.valueOf(objLine[1]), Float.valueOf(objLine[2]),
+							false, 240, TILE_HEIGHT, BUS_VELOCITY));
 				}
 			}
 			
 			else if(objLine[0].equals("log")) {
 				if(objLine[3].equals("false")) {
 					spriteList.add(new Platform("assets/log.png",
-							Float.valueOf(objLine[1]), Float.valueOf(objLine[2]), true, 120, TILE_HEIGHT, -BUS_VELOCITY));
+							Float.valueOf(objLine[1]), Float.valueOf(objLine[2]),
+							true, 120, TILE_HEIGHT, -BUS_VELOCITY));
 				}
 				else {
 					spriteList.add(new Platform("assets/log.png",
-							Float.valueOf(objLine[1]), Float.valueOf(objLine[2]), false, 120, TILE_HEIGHT, BUS_VELOCITY));
+							Float.valueOf(objLine[1]), Float.valueOf(objLine[2]),
+							false, 120, TILE_HEIGHT, BUS_VELOCITY));
 				}
 			}
 			
 			else if(objLine[0].equals("longLog")) {
 				if(objLine[3].equals("false")) {
 					spriteList.add(new Platform("assets/longLog.png",
-							Float.valueOf(objLine[1]), Float.valueOf(objLine[2]), true, 240, TILE_HEIGHT, -BUS_VELOCITY));
+							Float.valueOf(objLine[1]), Float.valueOf(objLine[2]),
+							true, 240, TILE_HEIGHT, -BUS_VELOCITY));
 				}
 				else {
 					spriteList.add(new Platform("assets/longLog.png",
-							Float.valueOf(objLine[1]), Float.valueOf(objLine[2]), false, 240, TILE_HEIGHT, BUS_VELOCITY));
+							Float.valueOf(objLine[1]), Float.valueOf(objLine[2]),
+							false, 240, TILE_HEIGHT, BUS_VELOCITY));
 				}
 			}
-			
 		}
+	}
 
-		/* Initialise player */
-		playerList.add(new Player("assets/frog.png", PLAYER_START_X, PLAYER_START_Y, this));		
+	public void update(Input input, int delta)
+			throws NumberFormatException, FileNotFoundException, SlickException {
 		
-	}
-	
-	public void initLevel(int lvl) {
-		for(int i=0; i < spriteList.size(); i++) {
-			
-		}
-	}
-
-	public void update(Input input, int delta) {
+		int playersFinished = 0;
+		
 		// Update all of the sprites in the game
 		for (Sprite sprite:spriteList) {
 			sprite.update(input, delta);	
@@ -177,6 +225,24 @@ public class World {
 					contactEachSprite(playerList.get(i), tileList.get(j), delta);
 				}
 			}
+		}
+		
+		/* Check for level end */
+		for (Player player:playerList) {
+			if (player.getFrogHolesReached() == 5) {
+				playersFinished++;
+			}
+		}
+		if (playersFinished >= playerList.size()) {
+			initLevel(++currentLvl);
+		}
+		
+	}
+	
+	public void resetPlayers() {
+		for (Player player:playerList) {
+			player.resetFrogHolesReached(0);
+			player.resetPosition();
 		}
 	}
 	

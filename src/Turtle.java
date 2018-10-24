@@ -1,7 +1,12 @@
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
+/**
+ * Platform which submerges periodically.
+ */
 public class Turtle extends Vehicle {
+	private static final int SURFACE_TIME = 7000;
+	private static final int SUBMERGE_TIME = 2000;
 	
 	private boolean isSubmerged = false;
 	private long timer = 0;
@@ -15,7 +20,7 @@ public class Turtle extends Vehicle {
 	public void contactSprite(Sprite other, int delta) {
 		if (this.isSubmerged() == false) {
 			if (other instanceof Player) {
-				other.addToX((float)(velocity * delta));
+				other.addToX((float)(getVelocity() * delta));
 			}
 		}
 	}
@@ -31,13 +36,13 @@ public class Turtle extends Vehicle {
 	public void update(Input input, int delta) {
 		timer += delta;
 		if (isSubmerged == false) {
-			if (timer >= 7000) {
+			if (timer >= SURFACE_TIME) {
 				setSubmerged(true);
 				timer = 0;
 			}
 		}
 		else if (isSubmerged == true) {
-			if (timer >= 2000) {
+			if (timer >= SUBMERGE_TIME) {
 				setSubmerged(false);
 				timer = 0;
 			}
@@ -45,13 +50,18 @@ public class Turtle extends Vehicle {
 		super.update(input, delta);
 	}
 
+	/**
+	 * @return isSubmerged
+	 */
 	public boolean isSubmerged() {
 		return isSubmerged;
 	}
-
+	
+	/**
+	 * @return Set new boolean value for isSubmerged.
+	 */
 	public void setSubmerged(boolean isSubmerged) {
 		this.isSubmerged = isSubmerged;
 	}
-	
 	
 }

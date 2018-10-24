@@ -1,5 +1,10 @@
 import org.newdawn.slick.SlickException;
 
+/**
+ * Goal of the game. Advances the game to the next level once all have been filled.
+ * Resets the Player position when filled.
+ * Kills the Player upon contact if it has previously been filled.
+ */
 public class FrogHole extends Sprite {
 	private boolean filled = false;
 

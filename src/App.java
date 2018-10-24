@@ -17,9 +17,9 @@ import org.newdawn.slick.Input;
  * Handles initialisation, input and rendering.
  */
 public class App extends BasicGame {
-    /** screen width, in pixels */
+    /** Screen width, in pixels */
     public static final int SCREEN_WIDTH = 1024;
-    /** screen height, in pixels */
+    /** Screen height, in pixels */
     public static final int SCREEN_HEIGHT = 768;
 
     private World world;
@@ -34,7 +34,6 @@ public class App extends BasicGame {
         try {
 			world = new World();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
@@ -48,10 +47,10 @@ public class App extends BasicGame {
             throws SlickException {
         // Get data about the current input (keyboard state).
         Input input = gc.getInput();
+        
         try {
 			world.update(input, delta);
 		} catch (NumberFormatException | FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }

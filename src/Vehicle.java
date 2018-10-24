@@ -1,8 +1,11 @@
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
+/**
+ * Moves by wrapping around to the opposite side of the screen when the edge is reached.
+ */
 abstract public class Vehicle extends Sprite {
-	double velocity;
+	private double velocity;
 
 	public Vehicle(String imageSrc, float x, float y, boolean flipImg, float velocity)
 			throws SlickException {
@@ -15,8 +18,17 @@ abstract public class Vehicle extends Sprite {
 		this.velocity = velocity;
 	}
 	
+	/**
+	 * @return velocity
+	 */
 	public double getVelocity() {
 		return this.velocity;
+	}
+	/**
+	 * @param velocity Set new velocity of type double
+	 */
+	public void setVelocity(double velocity) {
+		this.velocity = velocity;
 	}
 
 	@Override

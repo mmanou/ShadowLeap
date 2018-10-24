@@ -1,21 +1,15 @@
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+/**
+ * Represents the number of mistakes allowed to a player before they are eliminated.
+ * One is deleted whenever the Player contacts an obstacle.
+ */
 public class Life {
 	private Image image;
-	
-	/*
-	Life(String type) throws SlickException {
-		if (type.equals("Soul")) {
-			setImage(new Image(""));
-		}
-		else {
-			Life();
-		}
-	}
-	*/
-	Life() throws SlickException {
-		setImage(new Image("assets/lives.png"));
+
+	Life(String imageSrc) throws SlickException {
+		setImage(new Image(imageSrc));
 	}
 
 	public Image getImage() {

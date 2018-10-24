@@ -1,0 +1,4 @@
+currentLvl:0
+currentLifeTotal:3
+timeStoneCollected:false
+spaceStoneCollected:false

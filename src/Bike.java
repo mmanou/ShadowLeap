@@ -1,6 +1,9 @@
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
+/**
+ * Obstacle, moves by reversing direction at the edge of the screen
+ */
 public class Bike extends Traffic {
 
 	public Bike(String imageSrc, float x, float y, boolean flipImg, float velocity) throws SlickException {
@@ -9,13 +12,13 @@ public class Bike extends Traffic {
 
 	@Override
 	public void update(Input input, int delta) {
-		if ((velocity > 0 && isImageFlipped() == true)
-				|| (velocity < 0 && isImageFlipped() == false)) {
+		if ((getVelocity() > 0 && isImageFlipped() == true)
+				|| (getVelocity() < 0 && isImageFlipped() == false)) {
 			flipImage();
 		}
 		
-		if ((getX() >= 1000 && this.velocity > 0) || (getX() <= 24 && this.velocity < 0)) {
-			this.velocity = -this.velocity;
+		if ((getX() >= 1000 && this.getVelocity() > 0) || (getX() <= 24 && this.getVelocity() < 0)) {
+			this.setVelocity(-this.getVelocity());
 		}
 		
 		super.update(input, delta);
